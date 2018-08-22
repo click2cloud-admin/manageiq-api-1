@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'ci/reporter/rake/rspec'
 
 begin
   require 'rspec/core/rake_task'
@@ -13,4 +14,4 @@ require 'bundler/gem_tasks'
 
 FileList['lib/tasks_private/**/*.rake'].each { |r| load r }
 
-task :default => :spec
+task :default => ['ci:setup:rspec',:spec]

@@ -11,12 +11,18 @@ env:
   - RUBY_GC_HEAP_GROWTH_FACTOR=1.25
 addons:
   postgresql: '9.4'
+before_install:
+- mkdir -p $HOME/bin
+- curl -fsSL https://testspace-client.s3.amazonaws.com/testspace-linux.tgz | tar -zxvf- -C $HOME/bin
+- testspace config url open.stridespace.com
 install: bin/setup
-after_script: bundle exec codeclimate-test-reporter
-notifications:
-  webhooks:
-    urls:
-    - https://webhooks.gitter.im/e/46abb9c5f1f009b6a699
-    on_success: change
-    on_failure: always
-    on_start: never
+after_script: 
+- bundle exec codeclimate-test-reporter
+- testspace [Ruby-${TRAVIS_RUBY_VERSION}]./spec/reports/*.xml{.}
+# notifications:
+#   webhooks:
+#     urls:
+#     - https://webhooks.gitter.im/e/46abb9c5f1f009b6a699
+#     on_success: change
+#     on_failure: always
+#     on_start: never
